@@ -56,17 +56,5 @@ This repository contains a **GenAI-powered data profiling solution** designed fo
 - **SHAP Explainers** highlight key risk drivers.
 - **Gemini AI** suggests remediation actions.
 
-## Example Usage
-```python
-from src.validation import validate_transaction
-transaction = {"Transaction_Amount": 10000, "Currency": "USD", "Account_Balance": -500}
-report = validate_transaction(transaction)
-print(report)
-```
 
-## Contributors
-- **Dishita Mohan** (Technical Lead)
-
-## License
-This project is licensed under the MIT License.
 
