@@ -12,15 +12,24 @@ This repository contains a **GenAI-powered data profiling solution** designed fo
 
 ## Folder Structure
 ```
-├── data/                # Raw and processed datasets
+├── data/
+│   ├── transactions.csv                # Your raw transaction dataset
+│   ├── extracted_rules.py              # (Dynamically generated) Python script with validation rules
+│   ├── processed_transactions.csv      # Preprocessed data output
+│   ├── validated_transactions.csv      # Data after applying validation
+│   ├── anomalous_transactions.csv      # Data flagged as anomalous
+│   ├── remediated_transactions.csv     # Data with remediation advice added
+│
 ├── src/
-│   ├── main.py         # Main pipeline orchestrator
-│   ├── validation.py   # Transaction validation module
-│   ├── anomalies.py    # Anomaly detection module
-│   ├── remediation.py  # Risk scoring and remediation logic
-│   ├── utils.py        # Helper functions
-├── notebooks/          # Jupyter notebooks for testing and development
-├── README.md           # Project documentation
+│   ├── preprocessing.py                # Data loading and preprocessing
+│   ├── rule_extraction.py              # Extracts validation rules using Gemini
+│   ├── validation.py                   # Applies dynamic validation rules
+│   ├── anomaly_detection.py            # Anomaly detection using Isolation Forest
+│   ├── remediation.py                  # Suggest remediation actions using SHAP
+│   └── main.py                         # Orchestrates the entire pipeline
+│
+├── requirements.txt                    # Python dependencies
+└── README.md                           # Project documentation
 ```
 
 ## Setup & Installation
