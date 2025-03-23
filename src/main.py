@@ -3,11 +3,11 @@ from preprocessing import load_and_preprocess_data
 from rule_extraction import extract_rules_gemini
 from validation import validate_transactions
 from anomaly_detection import detect_anomalies
-from remediation import suggest_remediation_gemini
+from remediation import suggest_remediation_gemini,add_remediation_to_data
 
 def run_pipeline():
     print("Step 1: Preprocessing Data...")
-    df = load_and_preprocess_data(r"D:\DataProfiling_TechnologyHackathon\Team_Repo2\data\transactions.csv")
+    df = load_and_preprocess_data(r"C:\Users\krith\hackathon\data_profiling\data\transactions.csv")
 
     print("Step 2: Extracting Validation Rules...")
     instruction_text = """
@@ -86,11 +86,12 @@ def run_pipeline():
 
     If Transaction_Amount > $5,000 and Country is in high-risk countries (RU, IR, KP), flag as "High-risk transaction" and suggest enhanced due diligence.
     Round-Number Transactions (Money Laundering Risk):
-
     If Transaction_Amount is $1,000, $5,000, $10,000, $25,000, flag as "Potential money laundering risk" and require source of funds verification.
+
     Dynamic Risk Scoring System:
     Assign a base score of 0.
     Increase score based on flags and transaction history:
+    Take account  risk_score of previous transactions for the same  Customer_ID and if the cumulative sum of risk score exceeds a certain threshold(>50) then +100.
     +15 points for high-risk country transactions.
     +10 points for missing mandatory remarks on large transactions.
     +8 points for amount mismatches.
@@ -98,8 +99,8 @@ def run_pipeline():
     +5 points for unsupported currency use.
     +6 points for negative account balance without overdraft.
     +5 Future transaction date
-    +4 Old transaction (>365 days)	
-    
+    +4 Old transaction (>365 days)
+
     If risk score exceeds 15, transaction is high risk and must undergo compliance review.
     Remediation Actions:
     For flagged transactions, suggest appropriate actions, such as:
@@ -116,16 +117,16 @@ def run_pipeline():
     Returns a structured validation report (valid, flags, risk_score, remediation).
     Provides an example transaction and runs validation on it.
     """
-    # extract_rules_gemini(instruction_text)
+    extract_rules_gemini(instruction_text)
 
     print("Step 3: Validating Transactions...")
     validate_transactions(df)
 
     print("Step 4: Detecting Anomalies...")
-    detect_anomalies(pd.read_csv(r"Team_Repo2\data\validated_transactions.csv"))
+    detect_anomalies(pd.read_csv(r"C:\Users\krith\hackathon\data_profiling\data\validated_transactions.csv"))
 
     print("Step 5: Suggesting Remediation Actions...")
-    suggest_remediation_gemini(pd.read_csv(r"Team_Repo2\data\anomalous_transactions.csv"))
+    add_remediation_to_data(pd.read_csv(r"C:\Users\krith\hackathon\data_profiling\data\anomalous_transactions.csv"))
 
     print("Pipeline execution complete!")
 
