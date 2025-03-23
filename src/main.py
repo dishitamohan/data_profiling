@@ -5,13 +5,13 @@ from validation import validate_transactions
 from anomaly_detection import detect_anomalies
 from remediation import suggest_remediation_gemini,add_remediation_to_data
 
-def run_pipeline():
+def run_pipeline(chat_history,validation_rules):
     print("Step 1: Preprocessing Data...")
     df = load_and_preprocess_data(r"C:\Users\krith\hackathon\data_profiling\data\transactions.csv")
 
     print("Step 2: Extracting Validation Rules...")
-    instruction_text = """
-    Role: "You are an expert in financial compliance and Python programming. Your task is to extract transaction validation rules from the given regulatory instructions and generate a Python script that enforces these rules. The script must include a dynamic risk scoring system and remediation actions."
+    instruction_text = f"""
+    Role: "You are an expert in financial compliance and Python programming. Your task is to extract transaction validation rules from the chat history of the user and custom rules if provided to generate a Python script that enforces these rules. If no custom rules provided use default rules to generate a Python script that enforces these rules. The script must include a dynamic risk scoring system and remediation actions."
     output: only executable code without any kind of errors.
     Instructions:
     Generate a Python function that validates financial transactions based on the following regulatory rules. The function should return a structured validation report containing:
@@ -62,46 +62,42 @@ def run_pipeline():
     Type: Boolean
     Indicates if the transaction is international (values: TRUE/FALSE).
 
-    Validation Rules:
+    Chat History:
+    {chat_history}
+
+    Custom  Rules:
+    {validation_rules}
+
+    Default Rules:
+
     Transaction Amount vs. Reported Amount:
+    If transaction Amount differs from reported amount by more than 1% and Currency_Conversion is False, flag it as "Amount mismatch" and suggest an investigation.
 
-    If Transaction_Amount differs from Reported_Amount by more than 1% and Currency_Conversion is False, flag it as "Amount mismatch" and suggest an investigation.
     Negative Account Balance:
+    If account balance field is negative and OD (Overdraft) is not allowed, flag as "Negative balance" and recommend verifying overdraft permissions.
 
-    If Account_Balance is negative and OD (Overdraft) is not allowed, flag as "Negative balance" and recommend verifying overdraft permissions.
     Currency Code Validation:
-
     Transactions should use a valid ISO 4217 currency code.
     If Currency is not valid, flag it as "Invalid currency code" and recommend correcting it.
     If the currency is not in the allowed list, flag as "Unsupported currency" and suggest rejecting the transaction.
+
     Cross-Border Transactions:
-
-    If Cross_Border is True and Transaction_Amount > $10,000, mandatory Remarks are required.
+    If Cross_Border is True and transaction amount > $10,000, mandatory Remarks are required.
     If missing, flag as "Missing mandatory remarks" and suggest adding an explanation.
-    Transaction Date Checks:
 
+    Transaction Date Checks:
     Future transactions should be flagged with "Future transaction date" and require correction.
     Old transactions (>365 days) should be flagged for data integrity review.
-    High-Risk Country Transactions:
 
-    If Transaction_Amount > $5,000 and Country is in high-risk countries (RU, IR, KP), flag as "High-risk transaction" and suggest enhanced due diligence.
+    High-Risk Country Transactions:
+    If transaction amount > $5,000 and Country is in high-risk countries (RU, IR, KP), flag as "High-risk transaction" and suggest enhanced due diligence.
     Round-Number Transactions (Money Laundering Risk):
-    If Transaction_Amount is $1,000, $5,000, $10,000, $25,000, flag as "Potential money laundering risk" and require source of funds verification.
+    If transaction amount is $1,000, $5,000, $10,000, $25,000, flag as "Potential money laundering risk" and require source of funds verification.
 
     Dynamic Risk Scoring System:
-    Assign a base score of 0.
-    Increase score based on flags and transaction history:
-    Take account  risk_score of previous transactions for the same  Customer_ID and if the cumulative sum of risk score exceeds a certain threshold(>50) then +100.
-    +15 points for high-risk country transactions.
-    +10 points for missing mandatory remarks on large transactions.
-    +8 points for amount mismatches.
-    +7 points for round-number transactions.
-    +5 points for unsupported currency use.
-    +6 points for negative account balance without overdraft.
-    +5 Future transaction date
-    +4 Old transaction (>365 days)
+    A dynamic risk scoring system should be implemented, adjusting scores based on transaction patterns and historical violations.
+    If risk score exceeds a threshold, transaction is high risk and must undergo compliance review.
 
-    If risk score exceeds 15, transaction is high risk and must undergo compliance review.
     Remediation Actions:
     For flagged transactions, suggest appropriate actions, such as:
     Adjustments: Correcting discrepancies in amounts, currencies, and missing remarks.
@@ -126,9 +122,9 @@ def run_pipeline():
     detect_anomalies(pd.read_csv(r"C:\Users\krith\hackathon\data_profiling\data\validated_transactions.csv"))
 
     print("Step 5: Suggesting Remediation Actions...")
-    add_remediation_to_data(pd.read_csv(r"C:\Users\krith\hackathon\data_profiling\data\anomalous_transactions.csv"))
-
+    data=add_remediation_to_data(pd.read_csv(r"C:\Users\krith\hackathon\data_profiling\data\anomalous_transactions.csv"))
     print("Pipeline execution complete!")
+    return data
 
 if __name__ == "__main__":
     run_pipeline()
