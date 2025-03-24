@@ -8,67 +8,37 @@ from remediation import suggest_remediation_gemini,add_remediation_to_data
 def run_pipeline(chat_history,validation_rules):
     print("Step 1: Preprocessing Data...")
     df = load_and_preprocess_data(r"C:\Users\krith\hackathon\data_profiling\data\transactions.csv")
+    schema = {col: str(df[col].dtype) for col in df.columns}
+    sample_data = df.head(5).to_dict(orient="records")  # Convert to list of dictionaries
+    feature_insights = df.describe(include="all").to_dict()
+    llm_context = {
+    "schema": schema,
+    "sample_data": sample_data,
+    "feature_insights": feature_insights
+    }
 
     print("Step 2: Extracting Validation Rules...")
     instruction_text = f"""
-    Role: "You are an expert in financial compliance and Python programming. Your task is to extract transaction validation rules from the chat history of the user and custom rules if provided to generate a Python script that enforces these rules. If no custom rules provided use default rules to generate a Python script that enforces these rules. The script must include a dynamic risk scoring system and remediation actions."
+    Role: "You are an expert in financial compliance and Python programming. Your task is to extract transaction validation rules on dataset context provided. Use the chat history of the user and custom rules if provided to generate a Python script that enforces these rules on the data. The script must include a dynamic risk scoring system and remediation actions."
     output: only executable code without any kind of errors.
     Instructions:
-    Generate a Python function that validates financial transactions based on the following regulatory rules. The function should return a structured validation report containing:
+    Generate a Python function that validates financial transactions based on the following regulatory rules. The function should return a structured validation report in a dictionary format containing:
 
     valid (Boolean): Whether the transaction passes all checks.
     flags (List): A list of detected compliance issues.
     risk_score (Integer): A dynamically calculated risk score based on transaction patterns and historical violations.
     remediation (List): Suggested steps to fix or investigate flagged issues.
 
-    Transaction data has the following fields:
-    Customer_ID:
-    Type: Integer
-    Unique identifier for customers (e.g., 1000, 1001).
-
-    Account_Balance:
-    Type: Integer
-    Current balance in the account (may include negative values, e.g., -8).
-
-    Transaction_Amount:
-    Type: Integer
-    Amount involved in the transaction (e.g., 2720, 4745).
-
-    Reported_Amount:
-    Type: Integer
-    Amount officially reported (may differ slightly from Transaction_Amount, e.g., 2730 vs. 2720).
-
-    Currency:
-    Type: String
-    3-letter currency code (e.g., GBP, USD, INR).
-
-    Country:
-    Type: String
-    2-letter country code (e.g., UK, IN, US).
-
-    Transaction_Date:
-    Type: DateTime (with timezone)
-    Timestamp of the transaction (e.g., 2024-06-20 00:00:00+00:00).
-
-    Risk_Score:
-    Type: Integer
-    Numeric risk assessment (range: 1 to 10).
-
-    is_round_number:
-    Type: Boolean
-    Indicates if the transaction amount is a round number (values: TRUE/FALSE).
-
-    is_cross_border:
-    Type: Boolean
-    Indicates if the transaction is international (values: TRUE/FALSE).
+    Understand the fields and analyse the dataset with the  dataset context provided:
+    {llm_context}
 
     Chat History:
     {chat_history}
 
-    Custom  Rules:
+    Custom Validation Rules:
     {validation_rules}
 
-    Default Rules:
+    Default Validation Rules:
 
     Transaction Amount vs. Reported Amount:
     If transaction Amount differs from reported amount by more than 1% and Currency_Conversion is False, flag it as "Amount mismatch" and suggest an investigation.
@@ -118,11 +88,16 @@ def run_pipeline(chat_history,validation_rules):
     print("Step 3: Validating Transactions...")
     validate_transactions(df)
 
-    print("Step 4: Detecting Anomalies...")
-    detect_anomalies(pd.read_csv(r"C:\Users\krith\hackathon\data_profiling\data\validated_transactions.csv"))
 
-    print("Step 5: Suggesting Remediation Actions...")
-    data=add_remediation_to_data(pd.read_csv(r"C:\Users\krith\hackathon\data_profiling\data\anomalous_transactions.csv"))
+    validated_data=pd.read_csv(r"C:\Users\krith\hackathon\data_profiling\data\validated_transactions.csv")
+    if df.shape[0] > 100:
+        print("Step 4: Detecting Anomalies...")
+        detect_anomalies(validated_data)
+        print("Step 5: Suggesting Remediation Actions...")
+        data=add_remediation_to_data(pd.read_csv(r"C:\Users\krith\hackathon\data_profiling\data\anomalous_transactions.csv"))
+    else:
+        print("Step 5: Suggesting Remediation Actions...")
+        data=add_remediation_to_data(validated_data)
     print("Pipeline execution complete!")
     return data
 

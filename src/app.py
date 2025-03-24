@@ -14,6 +14,7 @@ st.title("📊 Regulatory Data Validation & Profiling")
 regulatory_text=""
 result_data=None
 # 1️⃣ Upload Regulatory Instructions
+st.subheader("Upload Validation rules Data")
 reg_file = st.file_uploader("Upload Regulatory Instructions (TXT, DOCX, PDF)", type=["txt", "docx", "pdf"])
 
 if reg_file:
@@ -25,7 +26,7 @@ if reg_file:
     # Store extracted rules in session state for refinement
     st.session_state["regulatory"] = regulatory_text
 
-st.title("Upload Transaction Data")
+st.subheader("Upload Transaction Data")
 
 uploaded_file = st.file_uploader("Upload a CSV or Excel file", type=["csv", "xlsx"])
 

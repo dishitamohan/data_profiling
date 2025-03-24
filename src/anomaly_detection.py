@@ -1,5 +1,13 @@
 import pandas as pd
 from sklearn.ensemble import IsolationForest
+from sklearn.preprocessing import StandardScaler
+from sklearn.feature_selection import VarianceThreshold
+import numpy as np
+
+
+# Configuration: Minimum required features
+MIN_FEATURES_BEFORE = 5  # Minimum number of features before variance thresholding
+MIN_FEATURES_AFTER = 3   # Minimum number of features after variance thresholding
 
 def extract_risk_score(row):
     """
@@ -19,6 +27,31 @@ def extract_risk_score(row):
         return report.get("risk_score", 0)
     return 0
 
+
+def select_features(df, min_before=MIN_FEATURES_BEFORE, min_after=MIN_FEATURES_AFTER):
+    # Drop non-numeric columns
+    df_numeric = df.select_dtypes(include=[np.number])
+    # Ensure we have at least `min_before` features
+    if df_numeric.shape[1] < min_before:
+        return df_numeric  # Return without variance thresholding
+
+    # Remove low-variance features (only if we have enough features)
+    selector = VarianceThreshold(threshold=0.01)  # Adjust threshold as needed
+    selected_features = selector.fit_transform(df_numeric)
+
+    # Get selected feature names
+    selected_columns = df_numeric.columns[selector.get_support()]
+
+    # Ensure we have at least `min_after` features after selection
+    if len(selected_columns) < min_after:
+        return df_numeric  # Return without variance thresholding
+
+    return pd.DataFrame(selected_features, columns=selected_columns)
+
+
+# Step 2: Standardize Data
+
+
 def detect_anomalies(data):
     """
     Detects anomalies using Isolation Forest, considering the risk score extracted from
@@ -26,17 +59,19 @@ def detect_anomalies(data):
     """
     # Create a new column 'Computed_Risk_Score' by extracting risk score from Validation_Report
     data["Computed_Risk_Score"] = data.apply(extract_risk_score, axis=1)
-    
+
     # Use Transaction_Amount, Account_Balance, and Computed_Risk_Score as features
-    features = ["Transaction_Amount", "Account_Balance","Computed_Risk_Score"]
+    df_selected = select_features(data)
+    scaler = StandardScaler()
+    df_scaled = scaler.fit_transform(df_selected)
     model = IsolationForest(contamination=0.05, random_state=42)
-    data["Anomaly_Score"] = model.fit_predict(data[features])
+    data["Anomaly_Score"] = model.fit_predict(df_scaled)
     data["Is_Anomaly"] = data["Anomaly_Score"] == -1
-    data.to_csv(r"Team_Repo2\data\anomalous_transactions.csv", index=True)
+    data.to_csv(r"C:\Users\krith\hackathon\data_profiling\data\anomalous_transactions.csv", index=True)
     return data
 
 if __name__ == "__main__":
-    df = pd.read_csv(r"Team_Repo2\data\validated_transactions.csv")
+    df = pd.read_csv(r"C:\Users\krith\hackathon\data_profiling\data\validated_transactions.csv")
     anomalous_df = detect_anomalies(df)
     print("Anomaly detection complete. Sample results:")
     print(anomalous_df[["Transaction_Amount", "Is_Anomaly", "Computed_Risk_Score"]].head())
