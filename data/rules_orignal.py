@@ -101,7 +101,7 @@ def validate_tkr(tkr: str) -> Union[None, str]:
     return None
 
 def validate_cusip(cusip: str) -> Union[None, str]:
-    cusip = cusip.strip()
+    cusip = str(cusip).strip()
     if cusip in {"", "NA"}:
         return None
     if not re.match(r'^[A-Z0-9]{6}$', cusip):
@@ -154,7 +154,7 @@ def validate_other_facility_type(other_facility_type: str, facility_type: str) -
             if not other_facility_type.strip():
                 return "Missing Other Facility Type Description"
         else:
-            if other_facility_type.strip():
+            if str(other_facility_type).strip():
                 return "Unnecessary Facility Description"
     except ValueError:
         return "Invalid Facility Type"
@@ -173,10 +173,10 @@ def validate_other_credit_facility_purpose(other_purpose: str, purpose: str) -> 
     try:
         p = int(purpose)
         if p == 0:
-            if not other_purpose.strip():
+            if not str(other_purpose).strip():
                 return "Missing Other Purpose Description"
         else:
-            if other_purpose.strip():
+            if str(other_purpose).strip():
                 return "Unnecessary Purpose Description"
     except ValueError:
         return "Invalid Purpose Code"

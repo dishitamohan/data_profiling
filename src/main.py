@@ -3,7 +3,6 @@ from preprocessing import load_and_preprocess_data
 from rule_extraction import extract_rules_gemini
 from validation import validate_transactions
 from anomaly_detection import detect_anomalies
-from remediation import suggest_remediation_gemini,add_remediation_to_data
 
 regulatory_rules=r'C:\Users\krith\hackathon\data_profiling\data\fed_regulations.txt'
 data_meta=r'C:\Users\krith\hackathon\data_profiling\data\fed_metadata.txt'
@@ -13,11 +12,12 @@ with open(data_meta, 'r') as file:
     data_meta = file.read()
 with open(r"C:\Users\krith\hackathon\data_profiling\data\rules_orignal.py", "r") as file:
     python_code = file.read()
-def_loan_data_path=r"C:\Users\krith\hackathon\data_profiling\data\data.csv"
+def_loan_data_path=r"C:\Users\krith\hackathon\data_profiling\data\synthetic_data.csv"
 def_loan_data=pd.read_csv(def_loan_data_path)
 
 def run_pipeline(loan_data, context):
     flag=False
+    anomaly_data=pd.DataFrame()
     if loan_data==None:
         loan_data=def_loan_data
     print("Step 1: Preprocessing Data...")
@@ -67,16 +67,13 @@ def run_pipeline(loan_data, context):
         extract_rules_gemini(instruction_text)
     print("Step 3: Validating Transactions...")
     validated_data=validate_transactions(df,seen_ids,seen_facility_ids,flag)
-    if df.shape[0] > 100:
+    if df.shape[0] >= 100:
         print("Step 4: Detecting Anomalies...")
         anomaly_data=detect_anomalies(validated_data)
-        print("Step 5: Suggesting Remediation Actions...")
-        data=add_remediation_to_data(anomaly_data)
+    if not anomaly_data.empty:
+        return anomaly_data
     else:
-        print("Step 5: Suggesting Remediation Actions...")
-        data=add_remediation_to_data(validated_data)
-    print("Pipeline execution complete!")
-    return data
+        return validated_data
 
 if __name__ == "__main__":
     run_pipeline()
