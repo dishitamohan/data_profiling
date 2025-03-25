@@ -45,7 +45,7 @@ if "result_data" not in st.session_state:
 
 # File Upload Section
 uploaded_file = st.file_uploader("Upload a CSV or Excel file for CORPORATE LOAN", type=["csv", "xlsx"])
-loan_data=None
+loan_data=pd.DataFrame()
 # Process the uploaded file if present
 if uploaded_file:
     st.session_state.file_uploaded = True

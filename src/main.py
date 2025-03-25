@@ -18,7 +18,7 @@ def_loan_data=pd.read_csv(def_loan_data_path)
 def run_pipeline(loan_data, context):
     flag=False
     anomaly_data=pd.DataFrame()
-    if loan_data==None:
+    if loan_data.empty:
         loan_data=def_loan_data
     print("Step 1: Preprocessing Data...")
     df,seen_ids,seen_facility_ids= load_and_preprocess_data(loan_data)
