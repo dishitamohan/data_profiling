@@ -31,6 +31,10 @@ This repository contains a **GenAI-powered data profiling solution** designed fo
 ├── requirements.txt                    # Python dependencies
 └── README.md                           # Project documentation
 ```
+## Architecture Diagram
+![Editor _ Mermaid Chart-2025-03-25-104733](https://github.com/user-attachments/assets/79aeada7-254f-4e15-96cd-b396113ef520)
+
+
 
 ## Setup & Installation
 ### Prerequisites
