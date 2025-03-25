@@ -1,0 +1,167 @@
+"FieldNo.","Field Name;(Technical FieldName)",MDRM,Description,Allowable Values
+1,"Customer ID(CustomerID)",CLCOM047,"Report the unique internal identifier for the customer relationshipunder which the obligor's exposure is aggregated in the reportingentity'screditsystems.CustomerIDisarelationshipconceptunder which multiple borrowers are aggregated because they haverelatedrisks,including,butnotlimitedtoparent/subsidiaryrelationships.Forstand-aloneorultimateparentobligors,theCustomer ID may be the same as the unique internal identifier forthe obligor provided in Field 2.","Must not contain a carriagereturn, line feed, comma or anyunprintable character."
+2,"Internal ID(InternalObligorID)",CLCOM300,"Reportthereportingentity’suniqueinternalidentifierfortheobligor. Internal ID is a borrower concept that identifies the entityunder which multiple loans are aggregated.","Must not contain a carriagereturn, line feed, comma or anyunprintable character."
+3,"OriginalInternal ID(OriginalInternalObligorID)",CLCOG064,"Report the internal identification code assigned to the obligor in theprevioussubmission.Ifthereisnochangefromthepriorsubmission, or if this is the first submission, the Internal ID reportedin Field 2 should be used as the Original Internal ID.","Must not contain a carriagereturn, line feed, comma or anyunprintable character."
+4,"Obligor Name(ObligorName)",CLCO9017,"Report the obligor name on the credit facility.Full legal corporate name is desirable. If the borrowing entity is anindividual(s) (Natural Person(s)), do not report the name; insteadsubstitute with the text: ""Individual.""For fronting exposures, report legal name of the participant lender.","Mustnotcontainacarriagereturn, line feed, comma or anyunprintable character."
+5,"City(City)",CLCO9130,"Report the name of the city in which the obligor is domiciled (asdefined in the FR Y-9C Glossary entry for “domicile”).","Free text indicating the Citywhere the Obligor is domiciled."
+6,"Country(Country)",CLCO9031,"Report the domicile  of the obligor (as defined in the FR Y-9CGlossary entry for “domicile”).",Use the 2 letter Country Code22
+7,"Zip Code(ZipCodeForeignMailingCode)",CLCO9220,"Report the five-digit zip code for locations within the 50 US states,Washington DC, Puerto Rico, the US Virgin Islands, Guam, Palau,Micronesia, the Northern Marianas, or the Marshall Islands. For allother locations report the foreign mailing code for the domicile ofthe obligor (as defined in the FR Y-9C Glossary entry for “domicile”).","For locations within the 50 USstates, Washington DC, PuertoRico, the US Virgin Islands,Guam, Palau, Micronesia, theNorthern Marianas, or theMarshall Islands: five-digit ZIPcode. If the ZIP code begins withzeroes, leading zeroes must bespecified with no punctuation.For International: use countryspecific postal code."
+8,"Industry Code(IndustryCode)",CLCO4537,"Reportthenumericcodethatdescribestheprimarybusinessactivity of the obligor according to the North American IndustryClassification System (NAICS).If the NAICS code is not available,provide either the Standard Industrial Classification (SIC), or GlobalIndustry Classification Standard (GICS).Iftheobligorisanindividual,theindustrycodeshouldbeconsistent with the industry in which the commercial purpose ofthe loan operates.If the business or individual operates in multiple industries, theBHC or IHC or SLHC should report the industry that best representsthe commercial risk of the loan (i.e., the predominant industry).","Report 4 to 6 digit number. Ifthis code is not available, thenprovide a SIC or GICS industrycode."
+9,"Industry CodeType(IndustryCodeType)",CLCOM297,"Select the type of industry code identification scheme used in Field8.","1. NAICS2. SIC3. GICS"
+10,"Obligor InternalRisk Rating(InternalRating)",CLCOG080,"Report the obligor rating grade from the reporting entity’s internalrisk rating system. For fronting exposures, report the participantlender’s rating grade from the reporting entity’s internal risk ratingsystem.This is the reporting entity’s probability of default (PD) rating. If thereporting entity uses a one-dimensional risk rating system, recordthat rating here.","Free text indicating the obligorrating grade.Obligor Internal Risk Ratingmust be consistent withSchedule H.4 (Internal RiskRating Schedule), Field 1."
+11,"TIN(TIN)",CLCO6191,"Report the Taxpayer Identification Number (TIN) assigned to theobligorbytheU.S.InternalRevenueService(IRS)intheadministrationoftaxlaws.Iftheborrowingentityisanindividual(s)(NaturalPerson(s)),donotreportSocialSecurityNumber; instead enter ‘NA’. If, the borrowing entity does not have aTIN, enter ‘NA’.","The 9 digit identificationassigned by the InternalRevenue Service for the obligoridentified in field 2.Allowable forms are either##-#######, #########, or‘NA’."
+12,"StockExchange(StockExchange)",CLCO4534,"Report the name of the Stock Exchange on which the primary stockof the obligor, or its parent, trades.If the borrowing entity is notpublicly traded, enter ‘NA’. In cases where the subsidiary is theobligorandthesubsidiaryispubliclytraded,reporttheStockExchangeandTickerSymbol(field#13)ofthesubsidiary,regardless of ownership structure. If the subsidiary is not publiclytraded,butitsparentis,reportthestockexchangeandtickersymboloftheparent.Reportinthesamemannerwhenthesubsidiary is minority owned.",Free text
+13,"Ticker Symbol(TKR)",CLCO4539,"ReporttheStockSymbolforstockslistedandtradedontheregulated exchange provided in Field 12.  For subsidiaries of publiccompanies,useparenttickersymbolfromitsprimaryStockExchange. If the borrowing entity is not publicly traded, enter ‘NA’.In cases where the subsidiary is the obligor and the subsidiary ispublicly traded, report the Stock Exchange (field #12) and TickerSymbol of the subsidiary, regardless of ownership structure. If thesubsidiary is not publicly traded, but its parent is, report the stockexchangeandtickersymboloftheparent.Reportinthesamemanner when the subsidiary is minority owned.",Free text
+14,"CUSIP(CUSIP)",CLCO9161,"Report the CUSIP of the obligor, if available. CUSIPs are identifierscreated and delivered by the CSB (CUSIP Service Bureau).  The CSBismanagedonbehalfoftheAmericanBankersAssociationbyStandard & Poor’s. Issuer codes are assigned alphabetically from aseries that includes deliberate built-in “gaps” for future expansion.Report the first six characters which are known as the base (orCUSIP-6) and uniquely identify the issuer. If a CUSIP does not apply,enter ‘NA’.","Must be valid 6 digit CUSIPnumber issued by the CUSIPService Bureau."
+15,"InternalCredit FacilityID(InternalCreditFacilityID)",CLCOM142,"Reportthereportingentity’suniqueinternalidentifierforthiscredit facility record. It must identify the credit facility for its entirelife and must be unique.In the event the internal facility ID changes (i.e., loan was convertedto a new system through migration or acquisition), also provideOriginal Internal credit facility ID in Field 16.Forfrontingexposures,reporttheuniqueinternalidentifierassigned to the participant lender’s fronting allocation.","Must be unique within asubmission and over time. Thatis, the same submission filemust not have two facilitieswith the same Credit Facility ID.May not contain a carriagereturn, line feed, comma or anyunprintable character."
+16,"Original InternalCredit FacilityID(OriginalInternalCreditFacilityID)",CLCOM296,"Report the Internal identification code assigned to the credit facilityrecord in the previous submission. If the credit facility representsthe fulfillment of a commitment to commit or a syndicated pipelineloan reported in the previous submission, report the credit facilityID used for that formerly reported exposure. If there is no changefrom the prior submission, or if this is the first submission, then theInternal credit facility ID reported in Field 15 should be used as theOriginal Internal credit facility ID.For disposed credit facilities, where the reason for the disposal isrebookings/restructures where loan amounts are transferred orcombinedbetweenobligations,reporttheIDseparatedbya,(comma).","May not contain a carriagereturn, line feed, or anyunprintable character.Provide the ID separated by a ,(comma). For example, iffacilities 123 and XYZ areaggregated into facility ABCthen the ""Unique ID"" (H.1Internal Credit Facility ID Field15, H.2 Loan Number Field 1) isreported as ABC and the""Original ID"" (H.1 OriginalInternal Credit Facility ID Field16, H.2 Original/Previous LoanNumber Field 35) is reportedas 123, XYZ."
+18,"OriginationDate(OriginationDate)",CLCO9912,"Report the origination date. The origination date is the contractualdate of the credit agreement.  (In most cases, this is the date thecommitment to lend becomes a legally binding commitment). Ifthere has been a major modification to the loan such thattheobligor executes a new or amended and restated credit agreement,use the revised contractual date of the credit agreement as theoriginationdate.Thefollowingindependentexampleswouldgenerally not result in a change in the contractual date of the loan,andthuswouldnotbeconsideredmajormodifications:(1)extensionoptionsatthesolediscretionoftheborrower;(2)covenants; (3) waivers; (4) change in the maturity date; (5) re-pricing; or (6) periodic credit reviews.Additionally, exclude allrenewals which meet the definition in the ‘Renewal Date’ Field 91.For corporate loans and leases in the syndicated pipeline, reportthe date on which the BHC or IHC or SLHC has extended terms tothe borrower in the signed commitment letter (option 1 in field100). Once the deal is reported as closed and settled (option 4 inField 100), report the updated origination date per the definitionabove.For commitments to commit which are not syndicated, report thedate on which the BHC or IHC or SLHC extended terms to theborrower.","Must be in yyyy- mm-dd format,e.g.:2005-02-011999-12-14Must be before or equal to theperiod end date of the data."
+19,"Maturity Date(MaturityDate)",CLCO9914,"Report the maturity date. The maturity date is the last date uponwhich the funds must be repaid, inclusive of extension options thatare solely at the borrower’s discretion, and according to the mostrecenttermsofthecreditagreement.Ifextensionoptionsareconditional on certain terms being met, such extensions should beconsideredtobeatthesolediscretionoftheborrower.Fordemandloan,enter‘9999-01-01’.Forcorporateloansinthesyndicated pipeline, until the syndicated loan is reported as closedand settled (option4 in Field 100), report the estimated maturitydate based on the tenor stated in the commitment letter.For commitments to commit which are not syndicated, report theestimated maturity date based on the tenor in the terms extendedto the borrower.","Must be in yyyy- mm-dd format,e.g.:2005-02-011999-12-14"
+20,"Credit FacilityType(FacilityType)",CLCOG072,"Report the credit facility type. Use the following credit facility typedescriptions, only.Note that these descriptions and codes mirrortherequirementsforSharedNationalCreditreportingandtherefore not all will be relevant for Corporate Loan reporting. If theCredit facility type is “Other,” provide description in Field 21.0OTHER1REVOLVING CREDIT2REVOLVING CREDIT CONVERTING TO TERM LOAN3REVOLVING CREDIT - ASSET BASED4REVOLVING CREDIT – DIP (Debtor-In-Possession)5NON-REVOLVING LINE OF CREDIT6NON-REVOLVING LINE OF CREDIT CONVERTING TO TERMLOAN7TERM LOAN8TERM LOAN – A9TERM LOAN – B10TERM LOAN – C11TERM LOAN – BRIDGE12TERM LOAN - ASSET BASED13TERM LOAN – DIP (Debtor-In-Possession)14CAPITALIZED LEASE OBLIGATION15STANDBY LETTER OF CREDIT16OTHER REAL ESTATE OWNED17OTHER ASSET18FRONTING EXPOSURE19COMMITMENT TO COMMIT","Enter number code of thedescription."
+21,"Other CreditFacility TypeDescription(OtherFacilityType)",CLCOG107,"Ifthecreditfacilityislistedas“Other”inField20,provideadescription of the “other credit facility type.” Leave this field blankif Field 20 is not zero.",Free Text
+22,"Credit Facility
+Purpose
+(CreditFacilityPu
+rpose)",CLCOG073,"Report the credit facility purpose. Use the following credit purpose
+descriptions, only. Note that these descriptions and codes mirror
+the requirements for Shared National Credit reporting and
+therefore not all will be relevant for Corporate Loan reporting. . If
+the credit facility purpose is “Other,” provide description in Field
+23.
+
+For fronting exposures, report the credit facility purpose based on
+the primary credit facility.
+
+0OTHER
+1ACQUISITION AND/OR MERGER FINANCING
+2ASSET SECURITIZATION FINANCING
+3CAPITAL EXPENDITURES EXCLUDING REAL ESTATE
+4COMMERCIAL PAPER BACK-UP
+5INDUSTRIAL REVENUE BOND BACK-UP
+6MORTGAGE WAREHOUSING
+7TRADE FINANCING
+8PERFORMANCE GUARANTEE
+9WORKING CAPITAL - SHORT TERM/SEASONAL
+10WORKING CAPITAL – PERMANENT
+11GENERAL CORPORATE PURPOSES
+12DEBT REFINANCE/CONSOLIDATION
+13ESOP FINANCING
+14AGRICULTURE AND/OR LIVESTOCK PRODUCTION
+15AGRICULTURE AND/OR RANCHING REAL ESTATE
+16STOCK BUYBACK
+17PORTFOLIO ACQUISITION INCLUDING NOTE PURCHASE
+AGREEMENTS
+18REAL ESTATE ACQUISITION/DEVELOPMENT/CONSTRUCTION –
+LAND
+19REAL ESTATE ACQUISITION/DEVELOPMENT/CONSTRUCTION –
+RESIDENTIAL20REAL ESTATE ACQUISITION/DEVELOPMENT/CONSTRUCTION -
+COMML & INDL
+21REAL ESTATE INVESTMENT/PERMANENT FINANCING -
+RESIDENTIAL","Enter number code of the
+description"
+,,,"22REAL ESTATE INVESTMENT/PERMANENT FINANCING -
+COMMERCIAL AND INDUSTRIAL
+23BUSINESS RECAPITALIZATION/DIVIDENDS
+24NEW PRODUCT DEVELOPMENT
+25PROJECT FINANCING
+26DEALER FLOORPLAN
+27EQUIPMENT LEASING
+28NON-PURPOSE LOAN COLLATERALIZED BY SECURITIES
+29BRIDGE FINANCING
+30CAPITAL CALL SUBSCRIPTION
+31DO NOT USE
+32DO NOT USE
+33DO NOT USE",
+23,"Other CreditFacility PurposeDescription(OtherFacilityPurpose)",CLCOG108,"If the credit facility purpose is listed as “Other” in Field 22,provide a description of the “other credit facility type.” Leave thisfield blank if Field 22 is not zero.",Free Text
+24,"
+Exposure Global
+23
+
+(CommittedExpo
+sure)",CLCOG074,"Report the total commitment amount as the sum of loan and lease
+financing receivables recorded in FR Y-9C, Schedule HC-C
+(reported in Field 25) and any unused portion of the commitment
+recorded in Schedules HC-F, HC-G, and HC-L.
+
+Report the total commitment amount and not the constrained
+commitment amount. For example, if the borrower has a contract
+for $1.1 million total commitment, but is constrained by
+borrowing base to $900 thousand, report the total commitment
+amount of $1.1 million.
+For facilities with multiple lenders, only provide the reporting
+entity’s pro-rata commitment, net of the above noted adjustments.
+For corporate loans and leases in the syndicated pipeline,
+reported as options 1 (single-signed), 2 (dual-signed) or 3 (closed
+but not settled) in Field 100, report the total commitment amount
+approved and stated in the commitment letter.
+For commitments to commit which are not syndicated, report the
+total commitment amount approved and offered to the borrower.","rounded whole dollar amount, e.g.: 20000000
+
+Supply numeric values without any non-numeric formatting (no dollar sign, commas or decimal)."
+25,"Utilized Exposure
+Global 24
+
+(UtilizedExposur
+e)",CLCOG075,"Report all loan and lease financing receivables consistent with the
+FR Y-9C instructions. Report the amortized cost for HFI loans and
+the lower of cost or fair value for HFS loans. Report at fair value all
+HFS and HFI loans that the firm has elected to report under a fair
+value option.
+
+
+Forfacilitieswithmultiplelenders,onlyprovidethereporting
+entity’spro-ratautilizedexposure,netoftheabovenoted
+adjustments.
+For fully undrawn commitments, enter
+0 (zero).
+
+For fronting exposures, report any funds advanced to the borrower
+on behalf of the participant lender as identified in field 4 (Obligor
+Name).
+
+For disposed credit facilities, report 0 (zero).","Rounded whole dollar amount
+with no cents, e.g.: 20000000
+Supply numeric values without
+any non- numeric formatting
+(no dollar sign, commas or
+decimal)."
+26,"Line Reportedon FR Y-9C(LineReportedOnFRY9C)",CLCOK449,"Report the integer code corresponding to the line number on theFR Y-9C, Schedule HC-C, in which the outstanding balance isrecorded or, in the case of an unused commitment, the linenumber in which the credit facility would be recorded if it weredrawn.RefertotheFRY-9CinstructionsfordefinitionsofSchedule HC-C line item categories.If the credit facility includes multiple loans, report the integercode corresponding to the type of loan which accounts for thelargest share of the credit facility committed balance.For fronting exposures, report the integer code correspondingto the line number on the HC-C in which the exposure would berecorded if it were drawn by the borrower.1.Loans to U.S. banks and other U.S. depository institutions  (FR Y-9C, Schedule HC-C, item 2.a);2.Loans to foreign banks (FR Y-9C, Schedule HC-C, item 2.b);3.Loanstofinanceagriculturalproductionandotherloanstofarmers (FR Y-9C, Schedule HC-C, item 3);4.CommercialandindustrialloanstoU.S.addresses(FRY-9C,Schedule HC-C, item 4.a);5.Commercial and industrial loans to non-U.S. addresses (FR Y-9C,Schedule HC-C, item 4.b);6.Loans to foreign governments and official institutions (includingforeign central banks) (FR Y-9C, Schedule HC-C, item 7);7.Loans to nondepository financial institutions (FR Y-9C, ScheduleHC-C, item 9.a);8.All other loans, excluding consumer loans (FR Y-9C, Schedule HC-C, item 9.b(2));","Enter number code of thedescription"
+,,,"9.All other leases, excluding consumer leases (FR Y-9C, Schedule
+HC-C, item 10.b);
+10. Loanssecuredbyowner-occupiednonfarmnonresidential
+properties originated in domestic offices (FR Y-9C, Schedule HC-
+C, item 1.e(1)); and
+11. Loans
+securedbyowner-occupiednonfarmnonresidential
+properties originated in non-domestic offices (reported within FR
+Y-9C, Schedule HC-C, item 1).",
+27,"Line of Business(LineOfBusiness)",CLCOK458,Provide the name of the internal line of business,"Free text describing the line of
+business. For example: Private
+Banking, Corporate Banking,
+Asset- Based Lending, etc.
+Must be consistent with line of
+business names as reported in
+Schedule H.3 (Line of Business
+Schedule), Field 1."
+28,"CumulativeCharge-offs(CumulativeChargeoffs)",CLCOG076,"Report the cumulative net charge-offs associated with the creditfacility on the reporting entity's books.Cumulative net charge-offs are the amount reflected over the life ofthe credit facility.If cumulative charge-offs are greater than the current commitmentbalance but less than the original commitment, report the totalcumulative charge-off amount even though it exceeds the currentcommitment.For disposed credit facilities, report the cumulative charge-offs asof the date of disposition.Forfrontingexposures,reportthecumulativenetcharge-offsassociated with impairment of the participant lender.","Rounded whole dollar amount,e.g.: 20000000Supply numeric values withoutany non- numeric formatting(no dollar sign, commas ordecimal).Should be 0 if there is nocharge-off for the facility.Should be ‘NA’ for loans held forsale or accounted for under afair value option."
+30,ASC 310-10,CLCOM292,"Report the reserve applied to the credit facility per ASC 310-10
+(formerly FAS 114, Accounting by Creditors for impairment of a
+loan). ASC 310-10 addresses specific reserves for impaired loans.
+For fronting exposures, report the scenario where collection of all
+unpaid principal and interest from the participant lender becomes
+unlikely and a specific reserve is made against the participant
+lender.
+
+If ASU 2016-13 has been adopted, report 0 for ASC 310-10 and
+report any applicable allowance for credit losses in field 102 (ASC
+326-20).","Rounded whole dollar amount,
+e.g.: 20000000
+Supply numeric values without
+any non- numeric formatting
+(no dollar sign, commas or
+decimal).
+Should be 0 if there is no ASC
+310-10 reserve for the credit
+facility.
+For fully undrawn
+commitments, enter 0."

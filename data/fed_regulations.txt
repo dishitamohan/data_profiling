@@ -1,0 +1,85 @@
+Validation Rules:
+
+Customer ID (CustomerID)
+Must not contain line breaks, commas, or unprintable characters. If invalid characters (e.g., \n, ,) are present, flag as "Invalid CustomerID" and reject the record.
+
+Internal Obligor ID (InternalObligorID)
+Unique identifier; no line breaks, commas, or unprintable chars. If duplicate ID or invalid characters, flag as "Duplicate/Invalid ObligorID" and deduplicate/correct.
+
+Original Internal Obligor ID (OriginalInternalObligorID)
+Must match InternalObligorID if no prior submission exists. If mismatch without justification, flag as "Original ID Mismatch" and verify submission history.
+
+Obligor Name (ObligorName)
+Must be a legal name or "Individual" for natural persons. No special chars. If contains "Individual" but TIN is not NA, flag as "Name-TIN Conflict" and cross-check TIN rules.
+
+City (City)
+Free text but must match domicile country. If city like "Paris" with Country "US", flag as "City-Country Mismatch" and verify domicile.
+
+Country (Country)
+Valid 2-letter ISO code (e.g., US, UK). If invalid code (e.g., XX, ZZ), flag as "Invalid Country Code" and reject.
+
+Zip Code (ZipCodeForeignMailingCode)
+US: 5 digits, no leading zero truncation (e.g., 02116). International: Country-specific format. If US ZIP with letters (e.g., ABCDE) or incorrect length, flag as "Invalid ZIP/Postal Code" and correct.
+
+Industry Code (IndustryCode)
+4–6 digits for NAICS/SIC/GICS. If non-numeric or invalid length (e.g., 123), flag as "Invalid Industry Code" and require valid code.
+
+Industry Code Type (IndustryCodeType)
+Must be 1 (NAICS), 2 (SIC), or 3 (GICS). If invalid code (e.g., 4), flag as "Invalid Code Type" and map to valid type.
+
+Obligor Internal Risk Rating (InternalRating)
+Free text but must align with Schedule H.4 (e.g., AAA, B-). If rating not in approved list, flag as "Unapproved Risk Rating" and review.
+
+TIN (TIN)
+Valid formats: ##-#######, #########, or NA (for individuals). Must be 9 digits if numeric. If malformed (e.g., 123-45-678) or missing for non-individuals, flag as "Invalid TIN" and correct.
+
+Stock Exchange (StockExchange)
+Free text or NA for non-public entities. If NA but TKR is populated, flag as "Exchange-TKR Conflict" and verify.
+
+Ticker Symbol (TKR)
+Must align with StockExchange or be NA. If invalid format (e.g., INVALID), flag as "Invalid Ticker" and correct.
+
+CUSIP (CUSIP)
+6-digit alphanumeric or NA. If invalid length (e.g., 12345) or non-alphanumeric, flag as "Invalid CUSIP" and reject.
+
+Internal Credit Facility ID (InternalCreditFacilityID)
+Unique, no special chars. If duplicate ID or invalid chars, flag as "Duplicate/Invalid FacilityID" and deduplicate.
+
+Original Internal Credit Facility ID (OriginalInternalCreditFacilityID)
+Must match InternalCreditFacilityID if no prior submission. If mismatch without justification (e.g., restructure), flag as "Original FacilityID Mismatch" and verify history.
+
+Origination Date (OriginationDate)
+Valid YYYY-MM-DD date ≤ current date. If future date (e.g., 2030-01-01), flag as "Future Origination Date" and correct.
+
+Maturity Date (MaturityDate)
+Valid YYYY-MM-DD date > OriginationDate (or 9999-01-01 for demand loans). If maturity before origination, flag as "Invalid Maturity Date" and correct.
+
+Credit Facility Type (FacilityType)
+Integer 0–19 (e.g., 7 = Term Loan). If out-of-range (e.g., 99), flag as "Invalid Facility Type" and reject.
+
+Other Credit Facility Type Description (OtherFacilityType)
+Required only if FacilityType = 0 ("Other"). If populated when FacilityType ≠ 0, flag as "Unnecessary Facility Description" and clear.
+
+Credit Facility Purpose (CreditFacilityPurpose)
+Integer 0–33 (e.g., 11 = General Corporate Purposes). If out-of-range (e.g., 99), flag as "Invalid Purpose Code" and reject.
+
+Other Credit Facility Purpose Description (OtherFacilityPurpose)
+Required only if CreditFacilityPurpose = 0. If populated when Purpose ≠ 0, flag as "Unnecessary Purpose Description" and clear.
+
+Committed Exposure (CommittedExposure)
+Rounded whole dollar amount (no $, commas). If negative or non-numeric, flag as "Invalid Exposure Amount" and correct.
+
+Utilized Exposure (UtilizedExposure)
+≤ CommittedExposure; 0 if undrawn. If utilized > committed, flag as "Overutilized Facility" and investigate.
+
+Line Reported on FR Y-9C (LineReportedOnFRY9C)
+Integer 1–11 (e.g., 4 = US Commercial Loans). If out-of-range (e.g., 12), flag as "Invalid Reporting Line" and map correctly.
+
+Line of Business (LineOfBusiness)
+Must match Schedule H.3 (e.g., "Corporate Banking"). If unapproved value (e.g., "Fake Business"), flag as "Unapproved Line of Business" and correct.
+
+Cumulative Charge-offs (CumulativeChargeoffs)
+≤ CommittedExposure; 0 or NA (for fair-value loans). If negative or > CommittedExposure, flag as "Invalid Charge-off Amount" and verify.
+
+ASC 310-10 (ASC31010)
+Rounded whole dollar amount; 0 if no reserve. If negative or non-numeric, flag as "Invalid Reserve Amount" and correct.

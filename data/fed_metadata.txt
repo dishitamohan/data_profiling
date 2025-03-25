@@ -1,0 +1,55 @@
+CustomerID (String) – Unique internal identifier for the customer relationship. Must not contain line breaks, commas, or unprintable characters.
+
+InternalObligorID (String) – Reporting entity's unique identifier for the obligor (borrower). Must be alphanumeric with no special characters.
+
+OriginalInternalObligorID (String) – Original internal ID from prior submissions. Must match InternalObligorID if no prior submission exists.
+
+ObligorName (String) – Legal name of the obligor. Use "Individual" for natural persons. Must not contain special characters.
+
+City (String) – City of the obligor's domicile. Free text but must align with Country.
+
+Country (String) – 2-letter ISO country code (e.g., US, UK) of the obligor's domicile. Invalid codes (e.g., XX) are violations.
+
+ZipCodeForeignMailingCode (String) – ZIP code (US, 5 digits) or foreign postal code. US codes must be numeric; international formats vary.
+
+IndustryCode (String) – 4-6 digit NAICS/SIC/GICS code describing the obligor's primary business activity.
+
+IndustryCodeType (Integer) – Industry code scheme: 1 (NAICS), 2 (SIC), or 3 (GICS).
+
+InternalRating (String) – Obligor's risk rating (e.g., AAA, B-). Must align with the institution's internal rating system.
+
+TIN (String) – Taxpayer Identification Number (format: ##-#######, #########, or NA for individuals).
+
+StockExchange (String) – Name of the stock exchange where the obligor's stock trades (NA if not public).
+
+TKR (String) – Ticker symbol for publicly traded obligors (NA if not applicable).
+
+CUSIP (String) – 6-character CUSIP identifier for the obligor (NA if not available).
+
+InternalCreditFacilityID (String) – Unique identifier for the credit facility. Must be alphanumeric with no special characters.
+
+OriginalInternalCreditFacilityID (String) – Original facility ID from prior submissions. May include comma-separated values for restructured loans.
+
+OriginationDate (Date) – Date the credit facility was originated (format: YYYY-MM-DD). Must not be a future date.
+
+MaturityDate (Date) – Date the facility matures (format: YYYY-MM-DD). Use 9999-01-01 for demand loans.
+
+FacilityType (Integer) – Credit facility type code (0-19), e.g., 7 = Term Loan.
+
+OtherFacilityType (String) – Description required only if FacilityType = 0 ("Other").
+
+CreditFacilityPurpose (Integer) – Purpose code (0-33), e.g., 11 = General Corporate Purposes.
+
+OtherFacilityPurpose (String) – Description required only if CreditFacilityPurpose = 0.
+
+CommittedExposure (Integer) – Total commitment amount in whole USD (no symbols/commas).
+
+UtilizedExposure (Integer) – Drawn amount in whole USD. Must be ≤ CommittedExposure.
+
+LineReportedOnFRY9C (Integer) – FR Y-9C schedule line number (1-11) where the facility is reported.
+
+LineOfBusiness (String) – Internal line of business (e.g., "Corporate Banking"). Must match approved values.
+
+CumulativeChargeoffs (Integer) – Lifetime net charge-offs for the facility. Must be ≤ CommittedExposure.
+
+ASC31010 (Integer) – Loan loss reserve amount under ASC 310-10 (whole USD). 0 if no reserve.

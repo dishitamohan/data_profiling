@@ -1,0 +1,128 @@
+CustomerID,InternalObligorID,OriginalInternalObligorID,ObligorName,City,Country,ZipCodeForeignMailingCode,IndustryCode,IndustryCodeType,InternalRating,TIN,StockExchange,TKR,CUSIP,InternalCreditFacilityID,OriginalInternalCreditFacilityID,OriginationDate,MaturityDate,FacilityType,OtherFacilityType,CreditFacilityPurpose,OtherFacilityPurpose,CommittedExposure,UtilizedExposure,LineReportedOnFRY9C,LineOfBusiness,CumulativeChargeoffs,ASC310-10,Validation_Report,Remediation_Advice
+CUST001,OBL001,OBL001,MedTech Solutions,Boston,US,2210,339112,1,AA,12-3456789,NASDAQ,MDTS,112233,FCL001,FCL001,2020-05-12,2025-05-12,7,Unknown,11,Unknown,10000000,5000000,4,Healthcare Finance,0,0,"{'valid': False, 'flags': ['Duplicate/Invalid ObligorID', 'Invalid ZIP/Postal Code', 'Duplicate/Invalid FacilityID', 'Unnecessary Facility Description', 'Unnecessary Purpose Description', 'Unapproved Line of Business', 'Invalid Reserve Amount'], 'risk_score': 48, 'remediation': ['Trigger enhanced compliance review and request additional documentation.']}","Here's a breakdown of remediation actions for each flagged issue:
+
+* **Duplicate/Invalid ObligorID:**  Investigate the duplicate.  Is this a truly duplicate entry or a clerical error (e.g., typo)?
+    * **Adjustment:** If duplicate, remove the incorrect entry. If invalid, correct the ObligorID based on verified information from the Master Obligor database.
+    * **Compliance:** Ensure unique ObligorIDs are assigned and validate against the master data source. Implement data quality checks to prevent future errors.
+
+* **Invalid ZIP/Postal Code:** The ZIP/Postal Code doesn't match the provided address.
+    * **Adjustment:** Correct the ZIP/Postal Code based on the obligor's address. Use a validated address database if available.
+    * **Compliance:**  Implement address verification tools during data entry.
+
+* **Duplicate/Invalid FacilityID:** Similar to ObligorID, determine if this is a true duplicate or simply invalid.
+    * **Adjustment:**  Remove the duplicate entry if applicable. If invalid, correct the FacilityID based on the master Facility database.
+    * **Compliance:** Enforce unique FacilityIDs and validate against the master data source. Implement data quality checks.
+
+* **Unnecessary Facility Description:**  While not strictly an error, it might signify data redundancy or potential confusion.
+    * **Adjustment:** If the FacilityID adequately identifies the facility, remove the unnecessary description.  Retain only if required for specific internal reporting unrelated to the core transaction data.
+    * **Compliance:** Review data entry practices to minimize unnecessary data fields and ensure consistency.
+
+* **Unnecessary Purpose Description:**  Similar to the facility description, evaluate its necessity.
+    * **Adjustment:**  Remove if redundant and the purpose is clear from other data points (e.g., loan type). Retain if critical and not captured elsewhere.
+    * **Compliance:** Standardize purpose codes or options to limit free-text descriptions where possible.
+
+* **Unapproved Line of Business:** The transaction falls under a Line of Business not permitted for this entity or individual. This is a serious compliance issue.
+    * **Adjustment:**  Depending on internal policy, the transaction might need to be reversed, blocked, or escalated to a higher authority for approval.
+    * **Compliance:**  Strict access controls are needed to prevent transactions in unauthorized lines of business. Review and update policies/procedures related to permissible business activities.
+
+* **Invalid Reserve Amount:** The reserve amount is either incorrectly calculated, outside acceptable parameters, or missing.
+    * **Adjustment:** Recalculate the reserve amount according to the established methodology.  If missing, determine and input the correct amount.
+    * **Compliance:** Review the reserve calculation logic for accuracy and completeness. Implement automated checks to ensure reserve amounts are within defined limits.
+
+
+By addressing each flagged issue with the appropriate adjustments and compliance steps, you can mitigate risks and ensure the transaction adheres to regulatory requirements and internal policies.  Thorough documentation of these remediation actions is essential for audit trails.
+"
+CUST002,OBL002,OBL002,Individual,Miami,US,33101,551112,2,B-,Unknown,NYSE,INVALID,INVALID,FCL002,FCL002,2021-01-30,2026-01-30,1,Unknown,9,Unknown,5000000,2000000,4,Retail Banking,10000,2000,"{'valid': False, 'flags': ['Duplicate/Invalid ObligorID', 'Name-TIN Conflict', 'Invalid TIN', 'Invalid Ticker', 'Invalid CUSIP', 'Duplicate/Invalid FacilityID', 'Unnecessary Facility Description', 'Unnecessary Purpose Description', 'Invalid Reserve Amount'], 'risk_score': 66, 'remediation': ['Trigger enhanced compliance review and request additional documentation.']}","Let's break down the remediation actions for each flagged issue:
+
+* **Duplicate/Invalid ObligorID:** Investigate the duplicate. If truly a duplicate, remove the erroneous entry. If invalid, correct the ObligorID using authoritative source documentation (e.g., loan agreement, counterparty database). Ensure unique ObligorIDs across the system for accurate tracking and reporting.
+
+* **Name-TIN Conflict:** This signals a potential mismatch between the obligor's name and their Taxpayer Identification Number (TIN). Verify both the name and TIN against official sources (IRS records, business filings).  Correct any discrepancies.  This is crucial for KYC/AML compliance.
+
+* **Invalid TIN:**  Verify the TIN format and check it against the appropriate authority (IRS for US entities). Correct if a typo. If the entity is foreign, confirm the validity according to their jurisdiction's rules. An invalid TIN can lead to penalties.
+
+* **Invalid Ticker:** Verify the ticker symbol against a reliable financial data source (e.g., Bloomberg, Reuters). Correct any typos. If the security isn't publicly traded, the ticker field should be left blank or populated with a designated placeholder for private placements.
+
+* **Invalid CUSIP:** Similar to the ticker, validate the CUSIP (Committee on Uniform Securities Identification Procedures) number against a reliable data source.  Correct typos.  If a valid CUSIP doesn't exist (e.g., for foreign securities), utilize the appropriate alternative identifier (e.g., ISIN).
+
+* **Duplicate/Invalid FacilityID:** Investigate the duplicate.  Remove the erroneous entry if truly a duplicate. If the FacilityID is invalid, correct it using internal facility documentation. Ensure unique FacilityIDs for accurate loan tracking.
+
+* **Unnecessary Facility Description:** While not strictly an error, redundant or overly verbose facility descriptions can clutter reporting. Streamline the description to concisely convey the facility's purpose (e.g., ""Revolving Credit Facility"" instead of ""Revolving Credit Facility for general corporate purposes and working capital needs"").
+
+* **Unnecessary Purpose Description:**  Similar to the facility description, keep the purpose description brief and to the point. Avoid excessive detail that doesn't add value for compliance or reporting (e.g., ""Acquisition of Company X"" instead of ""Acquisition of Company X, including all assets and liabilities, for strategic expansion into the widget market"").
+
+* **Invalid Reserve Amount:** Verify the reserve amount against the loan agreement or other relevant documentation. Correct any discrepancies. The reserve amount must be accurately recorded for financial reporting and risk management purposes.
+
+
+**Compliance Steps (General):**
+
+* **Document all corrections:** Maintain a clear audit trail of any changes made, including the original value, the corrected value, the date of correction, and the individual responsible.
+* **Review internal controls:** If these issues are recurring, review and strengthen internal data entry procedures, validation checks, and training programs.
+* **Escalate complex issues:** If discrepancies can't be easily resolved or suggest potentially fraudulent activity, escalate to the appropriate compliance or legal department.
+* **Regular data quality checks:** Implement periodic data quality reviews to proactively identify and correct data integrity issues.
+
+
+By systematically addressing these flagged issues and following the recommended compliance steps, you can significantly improve data accuracy, reduce compliance risks, and ensure the reliability of financial reporting.
+"
+CUST003,OBL003,OBL003,GreenEnergy Co.,Denver,XX,80202,221111,1,A+,987654321,LSE,GREN,445566,FCL003,FCL003_OLD,2022-11-15,2030-11-15,99,Carbon Credit Loan,0,Renewable Project,25000000,12000000,5,Energy Lending,50000,10000,"{'valid': False, 'flags': ['Duplicate/Invalid ObligorID', 'Duplicate/Invalid FacilityID', 'Original FacilityID Mismatch', 'Invalid Facility Type', 'Unnecessary Facility Description', 'Unapproved Line of Business', 'Invalid Reserve Amount'], 'risk_score': 56, 'remediation': ['Trigger enhanced compliance review and request additional documentation.']}","Let's break down each flag and the required remediation actions:
+
+* **Duplicate/Invalid ObligorID:**  Investigate the duplicate.  If truly duplicate, remove the incorrect entry. If invalid, correct the ObligorID to match the approved counterparty identifier in the system.  Ensure KYC (Know Your Customer) procedures are followed for accurate identification.
+
+* **Duplicate/Invalid FacilityID:** Similar to ObligorID, investigate and either remove the duplicate or correct the invalid ID. Each facility should have a unique identifier. Verify against the internal facility database.
+
+* **Original FacilityID Mismatch:** This indicates a potential amendment or renewal issue.  Verify the intended relationship between the current transaction and the referenced original facility. If an amendment, ensure proper documentation and approvals are in place. If incorrect, update to the proper original FacilityID.
+
+* **Invalid Facility Type:**  The facility type used (e.g., loan, letter of credit, derivative) doesn't match the transaction. Correct the facility type to accurately reflect the nature of the transaction.  Refer to the approved list of facility types.
+
+* **Unnecessary Facility Description:** While not a critical error, unnecessary descriptions can create confusion. Review and remove or streamline the description to be concise and relevant to the facility.  Maintain consistency in description formatting.
+
+* **Unapproved Line of Business:**  This signifies the transaction falls outside the institution's authorized business activities. This is a serious issue. Halt the transaction.  Escalate to the relevant business unit and compliance officer for review and potential approval.  Policy exception handling may be required.
+
+* **Invalid Reserve Amount:** The allocated reserve amount is incorrect, potentially due to miscalculation or incorrect application of reserve requirements. Recalculate the reserve amount based on the applicable regulations and internal policies. Document the justification for the corrected reserve amount.
+
+
+**General Compliance Steps Across All Issues:**
+
+* **Documentation:** Thoroughly document all investigation findings, remediation steps, and justifications for changes.
+* **Audit Trail:** Ensure a clear audit trail reflecting all modifications made to the transaction.
+* **Escalation:** For significant issues like Unapproved Line of Business, escalate to appropriate levels of management and compliance.
+* **Root Cause Analysis:** After remediation, conduct a root cause analysis to identify the source of the errors and implement preventative measures to avoid recurrence.
+* **Policy Review:** Periodically review and update relevant policies and procedures related to transaction processing and data quality.
+* **Training:** Provide ongoing training to staff involved in transaction processing to reinforce compliance requirements and best practices.
+"
+CUST004,OBL004,OBL004,Global Logistics,Chicago,US,60601,488510,1,BBB,23-4567890,NYSE,GLOB,778899,FCL004,FCL004,2019-08-20,2024-08-20,7,Unknown,11,Unknown,8000000,4000000,4,Transport Finance,0,0,"{'valid': False, 'flags': ['Duplicate/Invalid ObligorID', 'Duplicate/Invalid FacilityID', 'Unnecessary Facility Description', 'Unnecessary Purpose Description', 'Unapproved Line of Business', 'Invalid Reserve Amount'], 'risk_score': 43, 'remediation': ['Trigger enhanced compliance review and request additional documentation.']}",Error: Exceeded API rate limits. Try again later.
+CUST005,OBL005,OBL005,Individual,Dallas,US,75201,624410,3,C,Unknown,Unknown,Unknown,Unknown,FCL005,FCL005,2023-02-28,9999-01-01,5,Unknown,10,Unknown,300000,0,3,Consumer Loans,5000,0,"{'valid': False, 'flags': ['Duplicate/Invalid ObligorID', 'Name-TIN Conflict', 'Invalid TIN', 'Invalid Ticker', 'Invalid CUSIP', 'Duplicate/Invalid FacilityID', 'Unnecessary Facility Description', 'Unnecessary Purpose Description', 'Unapproved Line of Business', 'Invalid Reserve Amount'], 'risk_score': 74, 'remediation': ['Trigger enhanced compliance review and request additional documentation.']}",Error: Exceeded API rate limits. Try again later.
+CUST006,OBL006,OBL006,SteelWorks Inc.,Pittsburgh,US,15222,331111,1,BB,34-5678901,NYSE,STLW,667788,FCL006,FCL006,2018-07-10,2025-07-10,12,Unknown,25,Unknown,15000000,7500000,4,Industrial Loans,200000,30000,"{'valid': False, 'flags': ['Duplicate/Invalid ObligorID', 'Duplicate/Invalid FacilityID', 'Unnecessary Facility Description', 'Unnecessary Purpose Description', 'Unapproved Line of Business', 'Invalid Reserve Amount'], 'risk_score': 43, 'remediation': ['Trigger enhanced compliance review and request additional documentation.']}","Here's a breakdown of remediation actions for each flagged issue:
+
+* **Duplicate/Invalid ObligorID:**
+    * **Adjustment:** Investigate the duplicate or invalid ObligorID.  Confirm the correct ObligorID using authoritative sources (e.g., customer database, legal documents). Update the transaction with the valid and unique ObligorID.
+    * **Explanation:**  An incorrect ObligorID can lead to misattribution of risk, incorrect reporting, and potential regulatory violations.  Duplicates can create confusion and operational difficulties.
+    * **Compliance Steps:**  Document the investigation and correction process.  Implement data quality checks to prevent similar errors in the future. Potentially review other transactions associated with the incorrect/duplicate ObligorID.
+
+* **Duplicate/Invalid FacilityID:**
+    * **Adjustment:**  Similar to ObligorID, investigate and confirm the correct FacilityID. Update the transaction accordingly. If a duplicate exists, determine which FacilityID is accurate and retire the incorrect one, ensuring any associated transactions are migrated.
+    * **Explanation:** An inaccurate FacilityID can distort exposure calculations and reporting. Duplicates can lead to operational inefficiencies and misallocation of funds.
+    * **Compliance Steps:** Document the investigation, update, and retirement process. Strengthen internal controls to prevent future errors.
+
+* **Unnecessary Facility Description:**
+    * **Adjustment:**  While not necessarily a critical compliance issue, remove unnecessary descriptions to maintain data integrity and prevent confusion.  Retain only essential information relevant to the facility.
+    * **Explanation:**  Excessive or irrelevant information can clutter systems and make it difficult to locate key data.
+    * **Compliance Steps:**  Review data entry guidelines and provide training to staff on maintaining concise and relevant facility descriptions.
+
+* **Unnecessary Purpose Description:**
+    * **Adjustment:**  Remove the unnecessary description, keeping only the relevant purpose information.
+    * **Explanation:** Similar to the facility description, extraneous information in the purpose description creates clutter and potential confusion.
+    * **Compliance Steps:**  Update data entry guidelines and ensure staff are trained on maintaining concise and relevant purpose descriptions.
+
+* **Unapproved Line of Business:**
+    * **Adjustment:**  Halt the transaction. Determine if the line of business should be approved. If approved, update the transaction. If not approved, the transaction must be cancelled or modified to align with an approved line of business.
+    * **Explanation:**  Transacting in unapproved lines of business can expose the institution to undue risk and violate regulatory requirements.
+    * **Compliance Steps:**  Document the review and decision process.  Review internal policies and procedures for approving new lines of business. Enhance controls to prevent future transactions in unapproved areas.  Report the incident as necessary to relevant internal stakeholders (e.g., compliance officer).
+
+* **Invalid Reserve Amount:**
+    * **Adjustment:** Calculate the correct reserve amount based on the institution's policies and relevant regulations. Update the transaction with the accurate reserve amount.
+    * **Explanation:** An incorrect reserve amount can lead to inadequate loss provisioning and misrepresent the financial health of the institution.
+    * **Compliance Steps:**  Document the calculation and correction. Review the reserve calculation methodology and controls to prevent future errors.  Report the incident if material or part of a larger pattern.
+
+
+By addressing each flagged issue systematically and implementing the appropriate adjustments, explanations, and compliance steps, you can mitigate risks and ensure the transaction adheres to regulatory requirements and internal policies.
+"
