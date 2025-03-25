@@ -31,6 +31,10 @@ This repository contains a **GenAI-powered data profiling solution** designed fo
 ├── requirements.txt                    # Python dependencies
 └── README.md                           # Project documentation
 ```
+## Architecture Diagram
+![architecture_diagram](https://github.com/user-attachments/assets/6367eb19-4dff-47a9-b393-831c81587e4b)
+
+
 
 ## Setup & Installation
 ### Prerequisites
