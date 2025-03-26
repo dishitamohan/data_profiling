@@ -2,29 +2,15 @@ import re
 
 def clean_validation_script(script):
     """
-    Cleans the extracted validation script by removing extra text.
-    It keeps only the executable code starting from the first 'import' statement,
-    and removes any trailing lines that consist solely of triple backticks.
+    Extracts and returns all Python code blocks from the given markdown text.
+    If there are multiple code blocks, they will be concatenated with a newline in between.
     """
-    lines = script.split('\n')
-    cleaned_lines = []
-    code_started = False
-    for line in lines:
-        # Start collecting lines once we hit the first 'import' statement
-        if re.match(r'^import\s+\w+', line):
-            code_started = True
-        if code_started:
-            cleaned_lines.append(line)
+    # Regex pattern to match code blocks that start with ```python and end with ```
+    pattern = r"```python(.*?)```"
+    matches = re.findall(pattern, script, re.DOTALL)
     
-    # Remove the last line if it is exactly triple backticks
-    if cleaned_lines and cleaned_lines[-1].strip() == "```":
-        cleaned_lines = cleaned_lines[:-1]
-        
-    return "\n".join(cleaned_lines)
-
-if __name__ == "__main__":
-    # Example usage
-    with open("Team_Repo2\data\extracted_rules.py", "r") as f:
-        script = f.read()
-    cleaned_script = clean_validation_script(script)
-    print("Cleaned Script:\n", cleaned_script)
+    # Join all matches, stripping leading/trailing whitespace from each block.
+    if matches:
+        return "\n\n".join(match.strip() for match in matches)
+    else:
+        return ""
