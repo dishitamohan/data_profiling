@@ -13,7 +13,7 @@ def load_and_preprocess_data(data):
         pd.DataFrame: Cleaned and preprocessed dataset.
     """
     # Standardize column names (lowercase, replace spaces with underscores)
-    data.columns = data.columns.str.lower().str.replace(" ", "_")
+    # data.columns = data.columns.str.lower().str.replace(" ", "_")
 
     # Remove duplicates
     data = data.drop_duplicates()
@@ -29,13 +29,14 @@ def load_and_preprocess_data(data):
         data[col].fillna("Unknown", inplace=True)  # Fill categorical columns with "Unknown"
 
     # Encode categorical variables
-    for col in categorical_cols:
-        data[col] = LabelEncoder().fit_transform(data[col])
+    # for col in categorical_cols:
+    #     data[col] = LabelEncoder().fit_transform(data[col])
 
     # Scale numerical features
-    scaler = StandardScaler()
-    data[numeric_cols] = scaler.fit_transform(data[numeric_cols])
-
-    data.to_csv("D:\DataProfiling_TechnologyHackathon\Team_Repo2\data\processed_transactions.csv", index=False)
+    # scaler = StandardScaler()
+    # data[numeric_cols] = scaler.fit_transform(data[numeric_cols])
+    # seen_ids = data['InternalObligorID'].unique().tolist()
+    # seen_facility_ids = data['InternalCreditFacilityID'].unique().tolist()
+    data.to_csv(r"D:\DataProfiling_TechnologyHackathon\data_profiling-main\data_profiling-main\data\processed_transactions.csv", index=False)
     # return data
     return data
