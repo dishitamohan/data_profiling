@@ -3,128 +3,77 @@ from preprocessing import load_and_preprocess_data
 from rule_extraction import extract_rules_gemini
 from validation import validate_transactions
 from anomaly_detection import detect_anomalies
-from remediation import suggest_remediation_gemini,add_remediation_to_data
 
-def run_pipeline(chat_history,validation_rules):
+regulatory_rules=r'D:\DataProfiling_TechnologyHackathon\data_profiling-main\data_profiling-main\data\fed_regulations.txt'
+data_meta=r'D:\DataProfiling_TechnologyHackathon\data_profiling-main\data_profiling-main\data\fed_metadata.txt'
+with open(regulatory_rules, 'r') as file:
+    regulatory_rules = file.read()
+with open(data_meta, 'r') as file:
+    data_meta = file.read()
+with open(r"D:\DataProfiling_TechnologyHackathon\data_profiling-main\data_profiling-main\src\rules_orignal.py", "r") as file:
+    python_code = file.read()
+def_loan_data_path=r"D:\DataProfiling_TechnologyHackathon\data_profiling-main\data_profiling-main\data\synthetic_data.csv"
+def_loan_data=pd.read_csv(def_loan_data_path)
+
+def run_pipeline(loan_data, context):
+    flag=False
+    anomaly_data=pd.DataFrame()
+    if loan_data.empty:
+        loan_data=def_loan_data
     print("Step 1: Preprocessing Data...")
-    df = load_and_preprocess_data(r"C:\Users\krith\hackathon\data_profiling\data\transactions.csv")
+    df= load_and_preprocess_data(loan_data)
 
     print("Step 2: Extracting Validation Rules...")
     instruction_text = f"""
-    Role: "You are an expert in financial compliance and Python programming. Your task is to extract transaction validation rules from the chat history of the user and custom rules if provided to generate a Python script that enforces these rules. If no custom rules provided use default rules to generate a Python script that enforces these rules. The script must include a dynamic risk scoring system and remediation actions."
-    output: only executable code without any kind of errors.
-    Instructions:
-    Generate a Python function that validates financial transactions based on the following regulatory rules. The function should return a structured validation report containing:
+     Role: "You are an expert in financial compliance and Python programming. Your task is to Use the user context if provided to add or refine existing rules in regulatory instructions.
+     Generate a Python script that enforces these the rules. only create function for validation asked in User context.
 
-    valid (Boolean): Whether the transaction passes all checks.
-    flags (List): A list of detected compliance issues.
-    risk_score (Integer): A dynamically calculated risk score based on transaction patterns and historical violations.
-    remediation (List): Suggested steps to fix or investigate flagged issues.
+     output: only executable code WITHOUT any kind of errors.
+     Instructions:
+     Generate a Python function that validates corporate loan details based on the rule provided in the user context. The function should return a structured Validation Results in dictionary format containing:
+     valid (Boolean): Whether the transaction passes all checks.
+     flags (List): A list of detected compliance issues, append to the existing list.
+     remediation (List): Suggested steps to fix or investigate flagged issues, append to the existing list.
 
-    Transaction data has the following fields:
-    Customer_ID:
-    Type: Integer
-    Unique identifier for customers (e.g., 1000, 1001).
+    Corpporate Loan data fields:
+    {data_meta}
 
-    Account_Balance:
-    Type: Integer
-    Current balance in the account (may include negative values, e.g., -8).
+    User context:
+    {context}
 
-    Transaction_Amount:
-    Type: Integer
-    Amount involved in the transaction (e.g., 2720, 4745).
+    Example python code:
+    {python_code}
 
-    Reported_Amount:
-    Type: Integer
-    Amount officially reported (may differ slightly from Transaction_Amount, e.g., 2730 vs. 2720).
+     Remediation Actions:
+     For flagged transactions, suggest appropriate actions, such as:
+     Adjustments: Correcting discrepancies in amounts, currencies, and missing remarks.
+     Explanations: Requesting additional documentation or validation from the user.
+     Compliance Steps: Triggering enhanced due diligence, requesting source of funds, or blocking the transaction if risk is too high.
 
-    Currency:
-    Type: String
-    3-letter currency code (e.g., GBP, USD, INR).
+     Expected Output Format:
+     The LLM should return a Python script with NO ERRORS that:
 
-    Country:
-    Type: String
-    2-letter country code (e.g., UK, IN, US).
-
-    Transaction_Date:
-    Type: DateTime (with timezone)
-    Timestamp of the transaction (e.g., 2024-06-20 00:00:00+00:00).
-
-    Risk_Score:
-    Type: Integer
-    Numeric risk assessment (range: 1 to 10).
-
-    is_round_number:
-    Type: Boolean
-    Indicates if the transaction amount is a round number (values: TRUE/FALSE).
-
-    is_cross_border:
-    Type: Boolean
-    Indicates if the transaction is international (values: TRUE/FALSE).
-
-    Chat History:
-    {chat_history}
-
-    Custom  Rules:
-    {validation_rules}
-
-    Default Rules:
-
-    Transaction Amount vs. Reported Amount:
-    If transaction Amount differs from reported amount by more than 1% and Currency_Conversion is False, flag it as "Amount mismatch" and suggest an investigation.
-
-    Negative Account Balance:
-    If account balance field is negative and OD (Overdraft) is not allowed, flag as "Negative balance" and recommend verifying overdraft permissions.
-
-    Currency Code Validation:
-    Transactions should use a valid ISO 4217 currency code.
-    If Currency is not valid, flag it as "Invalid currency code" and recommend correcting it.
-    If the currency is not in the allowed list, flag as "Unsupported currency" and suggest rejecting the transaction.
-
-    Cross-Border Transactions:
-    If Cross_Border is True and transaction amount > $10,000, mandatory Remarks are required.
-    If missing, flag as "Missing mandatory remarks" and suggest adding an explanation.
-
-    Transaction Date Checks:
-    Future transactions should be flagged with "Future transaction date" and require correction.
-    Old transactions (>365 days) should be flagged for data integrity review.
-
-    High-Risk Country Transactions:
-    If transaction amount > $5,000 and Country is in high-risk countries (RU, IR, KP), flag as "High-risk transaction" and suggest enhanced due diligence.
-    Round-Number Transactions (Money Laundering Risk):
-    If transaction amount is $1,000, $5,000, $10,000, $25,000, flag as "Potential money laundering risk" and require source of funds verification.
-
-    Dynamic Risk Scoring System:
-    A dynamic risk scoring system should be implemented, adjusting scores based on transaction patterns and historical violations.
-    If risk score exceeds a threshold, transaction is high risk and must undergo compliance review.
-
-    Remediation Actions:
-    For flagged transactions, suggest appropriate actions, such as:
-    Adjustments: Correcting discrepancies in amounts, currencies, and missing remarks.
-    Explanations: Requesting additional documentation or validation from the user.
-    Compliance Steps: Triggering enhanced due diligence, requesting source of funds, or blocking the transaction if risk is too high.
-    Expected Output Format:
-    The LLM should return a Python script that:
-
-    Defines a validate_transaction(transaction) function.
-    Implements all validation rules listed above.
-    Uses datetime, pytz, and iso4217 for compliance checks.
-    Implements a dynamic risk scoring system that adjusts scores based on transaction patterns and history.
-    Returns a structured validation report (valid, flags, risk_score, remediation).
-    Provides an example transaction and runs validation on it.
-    """
-    extract_rules_gemini(instruction_text)
-
+     Defines a validate_transaction(transaction, seen_ids, seen_facility_ids) function.
+     ONLY Implements validation rules in the user context listed above.
+     Uses datetime, pytz, and iso4217 for compliance checks.
+     Returns a structured validation report (valid, flags, risk_score, remediation).
+     Provides an example transaction and runs validation on it.
+     run the generated code to check for type errors, value errors and other errors and rectify it for every function.
+     add excpetion handling block for every function to handle type errors, value errors and other errors so the program doesnt stop if any occurs. THIS IS VERY IMPORTANT. continue to perform other validation.
+     dont provide any comments in the code.
+     """
+    if context!="":
+        flag=True
+        extract_rules_gemini(instruction_text)
     print("Step 3: Validating Transactions...")
-    validate_transactions(df)
-
-    print("Step 4: Detecting Anomalies...")
-    detect_anomalies(pd.read_csv(r"C:\Users\krith\hackathon\data_profiling\data\validated_transactions.csv"))
-
-    print("Step 5: Suggesting Remediation Actions...")
-    data=add_remediation_to_data(pd.read_csv(r"C:\Users\krith\hackathon\data_profiling\data\anomalous_transactions.csv"))
-    print("Pipeline execution complete!")
-    return data
+    validated_data=validate_transactions(df,flag)
+    if df.shape[0] >= 100:
+        print("Step 4: Detecting Anomalies...")
+        anomaly_data=detect_anomalies(validated_data)
+    if not anomaly_data.empty:
+        return anomaly_data
+    else:
+        return validated_data
 
 if __name__ == "__main__":
     run_pipeline()
